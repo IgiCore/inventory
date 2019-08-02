@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using NFive.SDK.Core.Helpers;
 using NFive.SDK.Core.Models;
 
 namespace IgiCore.Inventory.Shared.Models
@@ -16,12 +17,19 @@ namespace IgiCore.Inventory.Shared.Models
 		public Guid? ParentContainerId { get; set; }
 
 		[JsonIgnore]
-		public virtual List<ContainerItem> Items { get; set; }
+		public virtual List<Item> Items { get; set; }
 
-		public uint Width { get; set; }
+		public int Width { get; set; }
 
-		public uint Height { get; set; }
+		public int Height { get; set; }
 
-		public uint MaxWeight { get; set; }
+		public int MaxWeight { get; set; }
+
+		public Container()
+		{
+			Id = GuidGenerator.GenerateTimeBasedGuid();
+			Created = DateTime.UtcNow;
+			Items = new List<Item>();
+		}
 	}
 }

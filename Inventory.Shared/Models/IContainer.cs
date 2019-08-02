@@ -10,12 +10,12 @@ namespace IgiCore.Inventory.Shared.Models
 
 		Guid? ParentContainerId { get; set; }
 
-		List<ContainerItem> Items { get; set; }
+		List<Item> Items { get; set; }
 
-		uint MaxWeight { get; set; }
+		int MaxWeight { get; set; }
 
-		uint Width { get; set; }
+		int Width { get; set; }
 
-		uint Height{ get; set; }
+		int Height { get; set; }
 	}
 }

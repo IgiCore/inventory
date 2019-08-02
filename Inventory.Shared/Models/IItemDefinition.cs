@@ -8,16 +8,16 @@ namespace IgiCore.Inventory.Shared.Models
 
 		string Description { get; set; }
 
-		byte[] Image { get; set; }
+		string Image { get; set; }
 
 		string Model { get; set; }
 
-		uint Weight { get; set; }
+		int Weight { get; set; }
 
-		uint Width { get; set; }
+		int Width { get; set; }
 
-		uint Height { get; set; }
+		int Height { get; set; }
 
-		uint TotalUses { get; set; }
+		int TotalUses { get; set; }
 	}
 }

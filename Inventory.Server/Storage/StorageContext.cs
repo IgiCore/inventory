@@ -12,8 +12,6 @@ namespace IgiCore.Inventory.Server.Storage
 
 		public DbSet<ItemDefinition> ItemDefinitions { get; set; }
 
-		public DbSet<ContainerItem> ContainerItems { get; set; }
-
 		public DbSet<WorldItem> WorldItems { get; set; }
 	}
 }

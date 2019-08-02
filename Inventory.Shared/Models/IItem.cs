@@ -9,6 +9,12 @@ namespace IgiCore.Inventory.Shared.Models
 
 		ItemDefinition ItemDefinition { get; set; }
 
-		uint UsesRemaining { get; set; }
+		Guid? ContainerId { get; set; }
+
+		int? X { get; set; }
+
+		int? Y { get; set; }
+
+		int UsesRemaining { get; set; }
 	}
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Data.Entity.Migrations;
+using System.Threading.Tasks;
 using IgiCore.Inventory.Server.Storage;
 using JetBrains.Annotations;
 using NFive.SDK.Core.Diagnostics;
@@ -19,88 +21,94 @@ namespace IgiCore.Inventory.Server
 		{
 			// Send configuration when requested
 			this.Rpc.Event(InventoryEvents.Configuration).On(e => e.Reply(this.Configuration));
+		}
 
-			using (var context = new StorageContext())
-			using (var transaction = context.Database.BeginTransaction())
+		public override Task Started()
+		{
+			try
 			{
-				var bottle = new ItemDefinition
+				using (var context = new StorageContext())
+				using (var transaction = context.Database.BeginTransaction())
 				{
-					Name = "Bottle",
-					Description = "No longer wet.",
-					Weight = 50,
-					Width = 1,
-					Height = 1,
-					TotalUses = 0
-				};
-
-				var cake = new ItemDefinition
-				{
-					Name = "Cake",
-					Description = "Not a lie.",
-					Weight = 5000,
-					Width = 2,
-					Height = 2,
-					TotalUses = 10
-				};
-
-				context.ItemDefinitions.AddOrUpdate(
-					cake,
-					new ItemDefinition
+					var bottleDefinition = new ItemDefinition
 					{
-						Name = "Slice of Cake",
-						Description = "Only a slight lie.",
-						Weight = 500,
+						Name = "Bottle",
+						Description = "No longer wet.",
+						Weight = 50,
 						Width = 1,
 						Height = 1,
-						TotalUses = 1
-					},
-					new ItemDefinition
+						TotalUses = 0
+					};
+					var cakeDefinition = new ItemDefinition
 					{
-						Name = "Bottle of Water",
-						Description = "Wet.",
-						Weight = 500,
-						Width = 1,
-						Height = 1,
-						TotalUses = 8
-					},
-					bottle
-				);
+						Name = "Cake",
+						Description = "Not a lie.",
+						Weight = 5000,
+						Width = 2,
+						Height = 2,
+						TotalUses = 10
+					};
+					context.ItemDefinitions.AddOrUpdate(
+						cakeDefinition,
+						new ItemDefinition
+						{
+							Name = "Slice of Cake",
+							Description = "Only a slight lie.",
+							Weight = 500,
+							Width = 1,
+							Height = 1,
+							TotalUses = 1
+						},
+						new ItemDefinition
+						{
+							Name = "Bottle of Water",
+							Description = "Wet.",
+							Weight = 500,
+							Width = 1,
+							Height = 1,
+							TotalUses = 8
+						},
+						bottleDefinition
+					);
 
-				var container = new Container()
-				{
-					Height = 10,
-					Width = 20,
-				};
+					var container = new Container()
+					{
+						Height = 10,
+						Width = 20,
+					};
+					context.Containers.AddOrUpdate(container);
+					var containerItem = new Item()
+					{
+						ItemDefinition = bottleDefinition,
+					};
+					context.Items.AddOrUpdate(containerItem);
+					container.Items.Add(containerItem);
 
-				context.Containers.AddOrUpdate(container);
 
-				var item = new Item()
-				{
-					ItemDefinition = bottle,
-				};
+					var worldItem = new Item()
+					{
+						ItemDefinition = cakeDefinition,
+					};
+					context.Items.AddOrUpdate(worldItem);
+					context.WorldItems.AddOrUpdate(new WorldItem()
+					{
+						Item = worldItem,
+						Position = new Position()
+					});
 
-				context.ContainerItems.AddOrUpdate(new ContainerItem()
-				{
-					Container = container,
-					Item = item,
-					X = 0,
-					Y = 0,
-				});
-
-				var worldItem = new Item()
-				{
-					ItemDefinition = cake,
-				};
-
-				context.WorldItems.AddOrUpdate(new WorldItem()
-				{
-					Item = worldItem,
-					Position = new Position()
-				});
-
-				context.SaveChanges();
-				transaction.Commit();
+					context.SaveChanges();
+					transaction.Commit();
+				}
 			}
+			catch (Exception e)
+			{
+				this.Logger.Debug(e.GetType().Name);
+				this.Logger.Debug(e.Message);
+				this.Logger.Debug(e.StackTrace);
+				this.Logger.Debug(e.InnerException?.Message ?? "");
+			}
+
+			return base.Started();
 		}
 
 		public override void Reload(Configuration configuration)

@@ -1,3 +1,5 @@
+using System;
+using NFive.SDK.Core.Helpers;
 using NFive.SDK.Core.Models;
 
 namespace IgiCore.Inventory.Shared.Models
@@ -8,16 +10,22 @@ namespace IgiCore.Inventory.Shared.Models
 
 		public string Description { get; set; }
 
-		public byte[] Image { get; set; }
+		public string Image { get; set; }
 
 		public string Model { get; set; }
 
-		public uint Weight { get; set; }
+		public int Weight { get; set; }
 
-		public uint Width { get; set; }
+		public int Width { get; set; }
 
-		public uint Height { get; set; }
+		public int Height { get; set; }
 
-		public uint TotalUses { get; set; }
+		public int TotalUses { get; set; }
+
+		public ItemDefinition()
+		{
+			Id = GuidGenerator.GenerateTimeBasedGuid();
+			Created = DateTime.UtcNow;
+		}
 	}
 }

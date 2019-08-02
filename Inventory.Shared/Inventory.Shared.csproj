@@ -56,9 +56,7 @@
     <Compile Include="InventoryEvents.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Models\Container.cs" />
-    <Compile Include="Models\ContainerItem.cs" />
     <Compile Include="Models\IContainer.cs" />
-    <Compile Include="Models\IContainerItem.cs" />
     <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\IItemDefinition.cs" />
     <Compile Include="Models\Item.cs" />
