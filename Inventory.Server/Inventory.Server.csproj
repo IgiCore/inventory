@@ -92,8 +92,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="InventoryManager.cs" />
-    <Compile Include="Migrations\201908022324195_Init.cs" />
+    <Compile Include="Migrations\201908032144314_Init.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Container.cs" />
     <Compile Include="Models\Item.cs" />

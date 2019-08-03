@@ -20,6 +20,6 @@ namespace IgiCore.Inventory.Client.Models
 
 		public int Height { get; set; }
 
-		public int MaxWeight { get; set; }
+		public float MaxWeight { get; set; }
 	}
 }

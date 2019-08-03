@@ -22,7 +22,7 @@ namespace IgiCore.Inventory.Server.Models
 
 		public int Height { get; set; }
 
-		public int MaxWeight { get; set; }
+		public float MaxWeight { get; set; }
 
 		public Container()
 		{

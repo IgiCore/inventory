@@ -53,6 +53,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ContainerValidationException.cs" />
+    <Compile Include="Exceptions\ItemOverlapException.cs" />
+    <Compile Include="Exceptions\MaxWeightExceededException.cs" />
     <Compile Include="InventoryEvents.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Models\IContainer.cs" />
@@ -64,5 +67,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

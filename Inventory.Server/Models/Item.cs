@@ -21,6 +21,12 @@ namespace IgiCore.Inventory.Server.Models
 
 		public Guid? ContainerId { get; set; }
 
+		public float Weight { get; set; }
+
+		public int Width { get; set; }
+
+		public int Height { get; set; }
+
 		public int? X { get; set; }
 
 		public int? Y { get; set; }

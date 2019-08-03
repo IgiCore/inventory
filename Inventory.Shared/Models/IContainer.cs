@@ -7,7 +7,7 @@ namespace IgiCore.Inventory.Shared.Models
 	{
 		Guid? ParentContainerId { get; set; }
 
-		int MaxWeight { get; set; }
+		float MaxWeight { get; set; }
 
 		int Width { get; set; }
 
