@@ -1,6 +1,7 @@
 using System;
 using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
+using IgiCore.Inventory.Server.Models;
 using IgiCore.Inventory.Server.Storage;
 using JetBrains.Annotations;
 using NFive.SDK.Core.Diagnostics;
@@ -9,7 +10,6 @@ using NFive.SDK.Server.Events;
 using NFive.SDK.Server.Rcon;
 using NFive.SDK.Server.Rpc;
 using IgiCore.Inventory.Shared;
-using IgiCore.Inventory.Shared.Models;
 using NFive.SDK.Core.Models;
 
 namespace IgiCore.Inventory.Server

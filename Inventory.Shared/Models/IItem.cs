@@ -7,13 +7,13 @@ namespace IgiCore.Inventory.Shared.Models
 	{
 		Guid ItemDefinitionId { get; set; }
 
-		ItemDefinition ItemDefinition { get; set; }
-
 		Guid? ContainerId { get; set; }
 
 		int? X { get; set; }
 
 		int? Y { get; set; }
+
+		bool Rotated { get; set; }
 
 		int UsesRemaining { get; set; }
 	}

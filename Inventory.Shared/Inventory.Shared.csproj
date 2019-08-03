@@ -55,14 +55,10 @@
   <ItemGroup>
     <Compile Include="InventoryEvents.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Models\Container.cs" />
     <Compile Include="Models\IContainer.cs" />
     <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\IItemDefinition.cs" />
-    <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\ItemDefinition.cs" />
     <Compile Include="Models\IWorldItem.cs" />
-    <Compile Include="Models\WorldItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 using System.Data.Entity;
-using IgiCore.Inventory.Shared.Models;
+using IgiCore.Inventory.Server.Models;
 using NFive.SDK.Server.Storage;
 
 namespace IgiCore.Inventory.Server.Storage

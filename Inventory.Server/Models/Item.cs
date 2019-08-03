@@ -1,11 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using IgiCore.Inventory.Shared.Models;
 using Newtonsoft.Json;
-using NFive.SDK.Core.Helpers;
 using NFive.SDK.Core.Models;
 
-namespace IgiCore.Inventory.Shared.Models
+namespace IgiCore.Inventory.Server.Models
 {
 	public class Item : IdentityModel, IItem
 	{
@@ -25,12 +25,8 @@ namespace IgiCore.Inventory.Shared.Models
 
 		public int? Y { get; set; }
 
-		public int UsesRemaining { get; set; }
+		public bool Rotated { get; set; }
 
-		public Item()
-		{
-			Id = GuidGenerator.GenerateTimeBasedGuid();
-            Created = DateTime.UtcNow;
-		}
+		public int UsesRemaining { get; set; }
 	}
 }

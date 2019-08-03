@@ -1,8 +1,7 @@
-using System;
-using NFive.SDK.Core.Helpers;
+using IgiCore.Inventory.Shared.Models;
 using NFive.SDK.Core.Models;
 
-namespace IgiCore.Inventory.Shared.Models
+namespace IgiCore.Inventory.Client.Models
 {
 	public class ItemDefinition : IdentityModel, IItemDefinition
 	{
@@ -21,11 +20,5 @@ namespace IgiCore.Inventory.Shared.Models
 		public int Height { get; set; }
 
 		public int TotalUses { get; set; }
-
-		public ItemDefinition()
-		{
-			Id = GuidGenerator.GenerateTimeBasedGuid();
-			Created = DateTime.UtcNow;
-		}
 	}
 }
