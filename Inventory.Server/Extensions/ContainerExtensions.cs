@@ -21,8 +21,8 @@ namespace IgiCore.Inventory.Server.Extensions
 			{
 				var xStart = item.X ?? 0;
 				var yStart = item.Y ?? 0;
-				var xEnd = item.X + item.Width - 1;
-				var yEnd = item.Y + item.Height - 1;
+				var xEnd = item.X + item.Width;
+				var yEnd = item.Y + item.Height;
 
 				for (var x = xStart; x < xEnd; x++)
 				{

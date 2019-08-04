@@ -1,4 +1,5 @@
 using System;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using IgiCore.Inventory.Server.Extensions;
@@ -16,6 +17,8 @@ namespace IgiCore.Inventory.Server
 	[PublicAPI]
 	public class InventoryManager
 	{
+		public virtual StorageContext GetContext() => new StorageContext();
+
 		public Item CreateItem(IItem itemToCreate)
 		{
 			var item = (Item)itemToCreate;
@@ -44,7 +47,7 @@ namespace IgiCore.Inventory.Server
 			var worldItem = (WorldItem)worldItemToCreate;
 			worldItem.Id = GuidGenerator.GenerateTimeBasedGuid();
 
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			using (var transaction = context.Database.BeginTransaction())
 			{
 				try
@@ -68,7 +71,7 @@ namespace IgiCore.Inventory.Server
 			var container = (Container)containerToCreate;
 			container.Id = GuidGenerator.GenerateTimeBasedGuid();
 
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			using (var transaction = context.Database.BeginTransaction())
 			{
 				try
@@ -91,7 +94,7 @@ namespace IgiCore.Inventory.Server
 			Item item;
 			Container container;
 
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			{
 				item = context.Items.First(i => i.Id == itemToAddId);
 				container = context.Containers.First(i => i.Id == containerToAddId);
@@ -102,7 +105,7 @@ namespace IgiCore.Inventory.Server
 
 		public void AddItemToContainer(IItem itemToAdd, IContainer containerToAdd, int x, int y, bool rotated = false)
 		{
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			using (var transaction = context.Database.BeginTransaction())
 			{
 				try
@@ -127,12 +130,13 @@ namespace IgiCore.Inventory.Server
 				}
 			}
 		}
+
 		public void CanItemFitInContainerAt(int x, int y, IItem itemToCheck, IContainer containerToCheck)
 		{
 			Container container;
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			{
-				container = context.Containers.Include("Items").First(c => c.Id == containerToCheck.Id);
+				container = context.Containers.Include(c => c.Items).First(c => c.Id == containerToCheck.Id);
 			}
 
 			CanItemWeightFitInContainer(itemToCheck, container);
@@ -150,11 +154,25 @@ namespace IgiCore.Inventory.Server
 
 		public void CanItemSizeFitInContainerAt(int x, int y, IItem item, Container container)
 		{
+			CanItemFitInContainerBoundsAt(x, y, item, container);
+			DoesItemCollideInContainerAt(x, y, item, container);
+		}
+
+		public void CanItemFitInContainerBoundsAt(int x, int y, IItem item, IContainer container)
+		{
+			if (x < 0 || y < 0 || x + item.Width > container.Width || y + item.Height > container.Height)
+			{
+				throw new ItemOutOfContainerBoundsException(container, item);
+			}
+		}
+
+		public void DoesItemCollideInContainerAt(int x, int y, IItem item, Container container)
+		{
 			// TODO: Benchmark and compare matrix math to looping.
 
 			var containerItemMatrix = container.GetItemMatrix();
-			var xEnd = item.X + item.Width - 1;
-			var yEnd = item.Y + item.Height - 1;
+			var xEnd = x + item.Width;
+			var yEnd = y + item.Height;
 			for (var r = x; r < xEnd; r++)
 			{
 				for (var c = y; c < yEnd; c++)

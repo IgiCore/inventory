@@ -6,12 +6,12 @@ namespace IgiCore.Inventory.Server.Storage
 {
 	public class StorageContext : EFContext<StorageContext>
 	{
-		public DbSet<Container> Containers { get; set; }
+		public virtual DbSet<Container> Containers { get; set; }
 
-		public DbSet<Item> Items { get; set; }
+		public virtual DbSet<Item> Items { get; set; }
 
-		public DbSet<ItemDefinition> ItemDefinitions { get; set; }
+		public virtual DbSet<ItemDefinition> ItemDefinitions { get; set; }
 
-		public DbSet<WorldItem> WorldItems { get; set; }
+		public virtual DbSet<WorldItem> WorldItems { get; set; }
 	}
 }
