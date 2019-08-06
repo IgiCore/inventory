@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using IgiCore.Inventory.Server.Models;
 using IgiCore.Inventory.Server.Storage;
 using IgiCore.Inventory.Shared.Exceptions;
@@ -222,6 +221,8 @@ namespace IgiCore.Inventory.Server.Tests
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 3, item, container));
 			Assert.ThrowsException<ItemOverlapException>(() =>
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(3, 4, item, container));
+			Assert.ThrowsException<ItemOverlapException>(() =>
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 4, item, container));
 		}
 
 		[TestMethod]
@@ -251,6 +252,8 @@ namespace IgiCore.Inventory.Server.Tests
 			{
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 5, item, container);
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 4, item, container);
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 5, item, container);
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 0, item, container);
 			}
 			catch (Exception ex)
 			{
