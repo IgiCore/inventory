@@ -1,6 +1,6 @@
 # IgiCore Inventory NFive Plugin
 [![License](https://img.shields.io/github/license/IgiCore/inventory.svg)](LICENSE)
-[![Build Status](https://img.shields.io/appveyor/ci/IgiCore/inventory/master.svg)](https://ci.appveyor.com/project/IgiCodes/inventory)
+[![Build Status](https://img.shields.io/appveyor/ci/IgiCodes/inventory/master.svg)](https://ci.appveyor.com/project/IgiCodes/inventory)
 [![Release Version](https://img.shields.io/github/release/IgiCore/inventory/all.svg)](https://github.com/IgiCore/inventory/releases)
 
 NFive Plugin
