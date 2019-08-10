@@ -24,7 +24,7 @@ namespace IgiCore.Inventory.Server
 			var item = (Item)itemToCreate;
 			item.Id = GuidGenerator.GenerateTimeBasedGuid();
 
-			using (var context = new StorageContext())
+			using (var context = GetContext())
 			using (var transaction = context.Database.BeginTransaction())
 			{
 				try

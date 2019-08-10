@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using IgiCore.Inventory.Server.Models;
 using IgiCore.Inventory.Server.Storage;
 using IgiCore.Inventory.Shared.Exceptions;
@@ -17,7 +16,6 @@ namespace IgiCore.Inventory.Server.Tests
 	public class InventoryManagerTests
 	{
 		private readonly Mock<InventoryManager> mockInventoryManager = new Mock<InventoryManager>();
-
 		private readonly Mock<StorageContext> mockStorageContext = new Mock<StorageContext>();
 
 		[TestInitialize]
@@ -25,8 +23,7 @@ namespace IgiCore.Inventory.Server.Tests
 		{
 			this.mockInventoryManager.Setup(x => x.GetContext()).Returns(this.mockStorageContext.Object);
 		}
-
-
+		
 		[TestMethod]
 		public void CanItemWeightFitInContainer_ItemExceedsWeight_ThrowsMaxWeightExceededException()
 		{
@@ -263,12 +260,17 @@ namespace IgiCore.Inventory.Server.Tests
 		{
 			var item = new Item
 			{
+				Id = GuidGenerator.GenerateTimeBasedGuid(),
 				Weight = 10
 			};
 			var container = new Container
 			{
+				Id = GuidGenerator.GenerateTimeBasedGuid(),
 				MaxWeight = 5
 			};
+
+			var set = new Mock<DbSet<Container>>().SetupData(new[] { container });
+			this.mockStorageContext.Setup(c => c.Containers).Returns(set.Object);
 
 			Assert.ThrowsException<MaxWeightExceededException>(() =>
 				this.mockInventoryManager.Object.CanItemFitInContainerAt(0, 0, item, container));
@@ -279,15 +281,19 @@ namespace IgiCore.Inventory.Server.Tests
 		{
 			var item = new Item
 			{
+				Id = GuidGenerator.GenerateTimeBasedGuid(),
 				Width = 5,
 				Height = 5,
 			};
-
 			var container = new Container
 			{
+				Id = GuidGenerator.GenerateTimeBasedGuid(),
 				Width = 10,
 				Height = 10,
 			};
+
+			var set = new Mock<DbSet<Container>>().SetupData(new[] { container });
+			this.mockStorageContext.Setup(c => c.Containers).Returns(set.Object);
 
 			Assert.ThrowsException<ItemOutOfContainerBoundsException>(() =>
 				this.mockInventoryManager.Object.CanItemFitInContainerAt(6, 6, item, container));
@@ -298,6 +304,7 @@ namespace IgiCore.Inventory.Server.Tests
 		{
 			var item = new Item
 			{
+				Id = GuidGenerator.GenerateTimeBasedGuid(),
 				Width = 2,
 				Height = 2,
 			};
@@ -310,6 +317,7 @@ namespace IgiCore.Inventory.Server.Tests
 				{
 					new Item
 					{
+						Id = GuidGenerator.GenerateTimeBasedGuid(),
 						X = 0,
 						Y = 0,
 						Width = 5,
@@ -318,17 +326,8 @@ namespace IgiCore.Inventory.Server.Tests
 				}
 			};
 
-			var mockContainerDbSet = new Mock<DbSet<Container>>();
-			var containerData = new List<Container> {container}.AsQueryable();
-			mockContainerDbSet.As<IQueryable<Container>>().Setup(x => x.Provider).Returns(containerData.Provider);
-			mockContainerDbSet.As<IQueryable<Container>>().Setup(x => x.Expression).Returns(containerData.Expression);
-			mockContainerDbSet.As<IQueryable<Container>>().Setup(x => x.ElementType).Returns(containerData.ElementType);
-			mockContainerDbSet.As<IQueryable<Container>>().Setup(x => x.GetEnumerator()).Returns(() => containerData.GetEnumerator());
-			mockContainerDbSet.As<IEnumerable>().Setup(x => x.GetEnumerator()).Returns(() => containerData.GetEnumerator());
-
-			mockContainerDbSet.Object.Add(container);
-
-			this.mockStorageContext.Setup(x => x.Containers).Returns(mockContainerDbSet.Object);
+			var set = new Mock<DbSet<Container>>().SetupData(new[] { container });
+			this.mockStorageContext.Setup(c => c.Containers).Returns(set.Object);
 
 			Assert.ThrowsException<ItemOverlapException>(() =>
 				this.mockInventoryManager.Object.CanItemFitInContainerAt(4, 3, item, container));
