@@ -219,6 +219,8 @@ namespace IgiCore.Inventory.Server.Tests
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 3, item, container));
 			Assert.ThrowsException<ItemOverlapException>(() =>
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(3, 4, item, container));
+			Assert.ThrowsException<ItemOverlapException>(() =>
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 4, item, container));
 		}
 
 		[TestMethod]
@@ -248,6 +250,8 @@ namespace IgiCore.Inventory.Server.Tests
 			{
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(4, 5, item, container);
 				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 4, item, container);
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 5, item, container);
+				this.mockInventoryManager.Object.DoesItemCollideInContainerAt(5, 0, item, container);
 			}
 			catch (Exception ex)
 			{

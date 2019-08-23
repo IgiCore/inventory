@@ -2,7 +2,6 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using IgiCore.Inventory.Server.Extensions;
 using IgiCore.Inventory.Server.Models;
 using IgiCore.Inventory.Server.Storage;
 using IgiCore.Inventory.Shared.Exceptions;
@@ -168,19 +167,14 @@ namespace IgiCore.Inventory.Server
 
 		public void DoesItemCollideInContainerAt(int x, int y, IItem item, Container container)
 		{
-			// TODO: Benchmark and compare matrix math to looping.
-
-			var containerItemMatrix = container.GetItemMatrix();
-			var xEnd = x + item.Width;
-			var yEnd = y + item.Height;
-			for (var r = x; r < xEnd; r++)
+			foreach(IItem i in container.Items)
 			{
-				for (var c = y; c < yEnd; c++)
+				if(!(x > i.X + i.Width - 1) &&
+				   !(x + item.Width < i.X) &&
+				   !(y > i.Y + i.Height - 1) &&
+				   !(y + i.Y < i.Y))
 				{
-					if (containerItemMatrix[r, c] != Guid.Empty)
-					{
-						throw new ItemOverlapException(item, container, containerItemMatrix[r, c]);
-					}
+					throw new ItemOverlapException(item, container, i.ContainerId ?? Guid.Empty);
 				}
 			}
 		}
