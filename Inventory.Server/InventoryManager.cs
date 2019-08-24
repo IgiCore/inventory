@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -16,7 +17,12 @@ namespace IgiCore.Inventory.Server
 	[PublicAPI]
 	public class InventoryManager
 	{
+		protected Dictionary<Guid, object> containerLocks = new Dictionary<Guid, object>();
+
 		public virtual StorageContext GetContext() => new StorageContext();
+
+		public virtual DbContextTransaction BeginTransaction(StorageContext context) =>
+			context.Database.BeginTransaction();
 
 		public Item CreateItem(IItem itemToCreate)
 		{
@@ -88,6 +94,22 @@ namespace IgiCore.Inventory.Server
 			return container;
 		}
 
+		protected Container GetContainerById(Guid id)
+		{
+			using (var context = GetContext())
+			{
+				return context.Containers.First(c => c.Id == id);
+			}
+		}
+
+		protected Item GetItemById(Guid id)
+		{
+			using (var context = GetContext())
+			{
+				return context.Items.Find(id);
+			}
+		}
+
 		public void AddItemToContainer(Guid itemToAddId, Guid containerToAddId, int x, int y, bool rotated = false)
 		{
 			Item item;
@@ -109,8 +131,8 @@ namespace IgiCore.Inventory.Server
 			{
 				try
 				{
-					var item = (Item) itemToAdd;
-					var container = (Container) containerToAdd;
+					var item = (Item)itemToAdd;
+					var container = (Container)containerToAdd;
 
 					CanItemFitInContainerAt(x, y, item, container);
 
@@ -167,14 +189,41 @@ namespace IgiCore.Inventory.Server
 
 		public void DoesItemCollideInContainerAt(int x, int y, IItem item, Container container)
 		{
-			foreach(IItem i in container.Items)
+			foreach (IItem i in container.Items)
 			{
-				if(!(x > i.X + i.Width - 1) &&
-				   !(x + item.Width < i.X) &&
-				   !(y > i.Y + i.Height - 1) &&
-				   !(y + i.Y < i.Y))
+				if (i.Id == item.Id) continue;
+
+				//if ((x < (i.X + i.Width - 1) && x > i.X
+				//    || (x + item.Width - 1) > i.X && (x + item.Width - 1) < (i.X + i.Width - 1))
+				//	&& (y < (i.Y + i.Height - 1) && y > i.Y
+				//    || (y + item.Height - 1) > i.Y && (y + item.Height - 1) < (i.Y + i.Height - 1)))
+
+				if (!(x > i.X + i.Width - 1) // Item's left edge is not to the right of i's right edge
+				    && !(x + item.Width < i.X) // Item's right edge is not to the left of i's left edge
+				    && !(y + item.Height - 1 < i.Y) // Item's bottom edge is not above i's top edge
+				    && !(y > i.Y + i.Width - 1)) // Item's top edge is not below i's bottom edge
 				{
 					throw new ItemOverlapException(item, container, i.ContainerId ?? Guid.Empty);
+				}
+			}
+		}
+
+		public void MoveItemWithinContainer(Guid itemId, Guid containerId, int moveToX, int moveToY)
+		{
+			if (!this.containerLocks.ContainsKey(containerId)) this.containerLocks[containerId] = new object();
+			lock (this.containerLocks[containerId])
+			{
+				var container = GetContainerById(containerId);
+				var item = container.Items.First(i => i.Id == itemId);
+
+				CanItemSizeFitInContainerAt(moveToX, moveToY, item, container);
+				item.X = moveToX;
+				item.Y = moveToY;
+
+				using (var context = GetContext())
+				{
+					context.Items.AddOrUpdate(item);
+					context.SaveChanges();
 				}
 			}
 		}

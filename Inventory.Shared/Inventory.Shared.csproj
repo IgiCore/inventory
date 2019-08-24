@@ -53,6 +53,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ItemNotInContainerException.cs" />
     <Compile Include="Exceptions\ItemOutOfContainerBoundsException.cs" />
     <Compile Include="Exceptions\ContainerValidationException.cs" />
     <Compile Include="Exceptions\ItemOverlapException.cs" />

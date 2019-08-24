@@ -118,6 +118,8 @@
   <ItemGroup>
     <Compile Include="ConsoleOutput.cs" />
     <Compile Include="InventoryManagerTests.cs" />
+    <Compile Include="MockableDbSetWithExtensions.cs" />
+    <Compile Include="MockDbSetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
