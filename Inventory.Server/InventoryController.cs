@@ -10,7 +10,6 @@ using NFive.SDK.Server.Events;
 using NFive.SDK.Server.Rcon;
 using NFive.SDK.Server.Rpc;
 using IgiCore.Inventory.Shared;
-using NFive.SDK.Core.Models;
 
 namespace IgiCore.Inventory.Server
 {
@@ -70,31 +69,6 @@ namespace IgiCore.Inventory.Server
 						},
 						bottleDefinition
 					);
-
-					var container = new Container()
-					{
-						Height = 10,
-						Width = 20,
-					};
-					context.Containers.AddOrUpdate(container);
-					var containerItem = new Item()
-					{
-						ItemDefinition = bottleDefinition,
-					};
-					context.Items.AddOrUpdate(containerItem);
-					container.Items.Add(containerItem);
-
-
-					var worldItem = new Item()
-					{
-						ItemDefinition = cakeDefinition,
-					};
-					context.Items.AddOrUpdate(worldItem);
-					context.WorldItems.AddOrUpdate(new WorldItem()
-					{
-						Item = worldItem,
-						Position = new Position()
-					});
 
 					context.SaveChanges();
 					transaction.Commit();

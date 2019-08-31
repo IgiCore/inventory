@@ -13,6 +13,8 @@ namespace IgiCore.Inventory.Client.Models
 
 		public Guid? ParentContainerId { get; set; }
 
+		public string Name { get; set; }
+
 		[JsonIgnore]
 		public virtual List<Item> Items { get; set; }
 
