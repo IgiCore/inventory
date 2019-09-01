@@ -52,6 +52,38 @@ namespace IgiCore.Inventory.Server
 			}
 		}
 
+		public List<ItemDefinition> GetItemDefinitions()
+		{
+			using (var context = new StorageContext())
+			{
+				return context.ItemDefinitions.ToList();
+			}
+		}
+
+		public List<Item> GetItems()
+		{
+			using (var context = new StorageContext())
+			{
+				return context.Items.ToList();
+			}
+		}
+
+		public List<Container> GetContainers()
+		{
+			using (var context = new StorageContext())
+			{
+				return context.Containers.ToList();
+			}
+		}
+
+		public List<WorldItem> GetWorldItems()
+		{
+			using (var context = new StorageContext())
+			{
+				return context.WorldItems.ToList();
+			}
+		}
+
 		public Item CreateItem(IItem itemToCreate)
 		{
 			var item = (Item)itemToCreate;
