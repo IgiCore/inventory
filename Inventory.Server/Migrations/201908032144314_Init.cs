@@ -25,6 +25,7 @@ namespace IgiCore.Inventory.Server.Migrations
                     {
                         Id = c.Guid(nullable: false),
                         ParentContainerId = c.Guid(),
+						Name = c.String(),
                         Width = c.Int(nullable: false),
                         Height = c.Int(nullable: false),
                         MaxWeight = c.Single(nullable: false),
