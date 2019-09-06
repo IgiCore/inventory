@@ -13,5 +13,3 @@ client:
     - IgiCore.Inventory.Client
   include:
     - IgiCore.Inventory.Shared
-  files:
-    - Overlays/InventoryOverlay.html
