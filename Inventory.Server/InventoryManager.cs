@@ -9,8 +9,8 @@ using IgiCore.Inventory.Shared.Exceptions;
 using IgiCore.Inventory.Shared.Models;
 using JetBrains.Annotations;
 using NFive.SDK.Core.Helpers;
-using NFive.SDK.Core.IoC;
 using NFive.SDK.Core.Models;
+using NFive.SDK.Server.IoC;
 
 // ReSharper disable AccessToDisposedClosure
 namespace IgiCore.Inventory.Server
@@ -18,7 +18,7 @@ namespace IgiCore.Inventory.Server
 	[Component(Lifetime = Lifetime.Singleton)]
 	[PublicAPI]
 	// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-	public class InventoryManager
+	public class InventoryManager : IInventoryManager
 	{
 		private readonly Dictionary<Guid, object> containerLocks = new Dictionary<Guid, object>();
 		private readonly Dictionary<Guid, object> itemLocks = new Dictionary<Guid, object>();

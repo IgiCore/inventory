@@ -6,20 +6,22 @@ using IgiCore.Inventory.Server.Storage;
 using JetBrains.Annotations;
 using NFive.SDK.Core.Diagnostics;
 using NFive.SDK.Server.Controllers;
-using NFive.SDK.Server.Events;
-using NFive.SDK.Server.Rcon;
-using NFive.SDK.Server.Rpc;
 using IgiCore.Inventory.Shared;
+using NFive.SDK.Server.Communications;
 
 namespace IgiCore.Inventory.Server
 {
 	[PublicAPI]
 	public class InventoryController : ConfigurableController<Configuration>
 	{
-		public InventoryController(ILogger logger, IEventManager events, IRpcHandler rpc, IRconManager rcon, Configuration configuration) : base(logger, events, rpc, rcon, configuration)
+		private readonly ICommunicationManager comms;
+
+		public InventoryController(ILogger logger, Configuration config , ICommunicationManager comms) : base(logger, config)
 		{
+			this.comms = comms;
+
 			// Send configuration when requested
-			this.Rpc.Event(InventoryEvents.Configuration).On(e => e.Reply(this.Configuration));
+			this.comms.Event(InventoryEvents.Configuration).FromClients().OnRequest(e => e.Reply(this.Configuration));
 		}
 
 		public override Task Started()
@@ -91,7 +93,7 @@ namespace IgiCore.Inventory.Server
 			base.Reload(configuration);
 
 			// Send out new configuration
-			this.Rpc.Event(InventoryEvents.Configuration).Trigger(this.Configuration);
+			this.comms.Event(InventoryEvents.Configuration).ToClients().Emit(this.Configuration);
 		}
 	}
 }
