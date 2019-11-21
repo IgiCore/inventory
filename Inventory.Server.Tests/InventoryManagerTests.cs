@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using IgiCore.Inventory.Server.Models;
 using IgiCore.Inventory.Server.Storage;
 using IgiCore.Inventory.Shared.Exceptions;
